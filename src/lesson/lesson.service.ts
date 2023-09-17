@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Lesson } from './lesson.entity';
+import { CreateLessonInput } from './lesson.input';
 
 const logger = new Logger('LessonService');
 
@@ -19,7 +20,13 @@ export class LessonService {
     });
   }
 
-  async createLesson(name, startDate, endDate): Promise<Lesson> {
+  async getAllLesson(): Promise<Lesson[]> {
+    logger.log(`Get all lesson`);
+    return this.lessonRepo.find();
+  }
+
+  async createLesson(lessonInput: CreateLessonInput): Promise<Lesson> {
+    const { name, startDate, endDate } = lessonInput;
     const lesson = this.lessonRepo.create({
       id: uuid(),
       name,
